@@ -10,10 +10,11 @@ const iv = crypto.randomBytes(16);
 //Encrypting text
 function encrypt(text) {
   try {
-    let cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(key), iv);
+    let cipher = crypto.createCipheriv(algorithm, Buffer.from(key, 'hex'), iv);
     let encrypted = cipher.update(text);
     encrypted = Buffer.concat([encrypted, cipher.final()]);
-    return encrypted.toString("hex");
+    return iv.toString('hex') + ':' + encrypted.toString('hex');
+    
   } catch (err) {
     console.error("Something went wrong");
     console.error(err);
@@ -22,12 +23,19 @@ function encrypt(text) {
 
 // Decrypting text
 function decrypt(text) {
-  let iv = Buffer.from(text.iv, "hex");
-  let encryptedText = Buffer.from(text.encryptedData, "hex");
-  let decipher = crypto.createDecipheriv("aes-256-cbc", Buffer.from(key), iv);
-  let decrypted = decipher.update(encryptedText);
-  decrypted = Buffer.concat([decrypted, decipher.final()]);
-  return decrypted.toString();
+  try{
+    let textParts = text.split(':');
+    let iv = Buffer.from(textParts.shift(), 'hex');
+    let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    let decipher = crypto.createDecipheriv(algorithm, Buffer.from(key, 'hex'), iv);
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString();
+
+  }catch(err){
+    console.error("Something went wrong");
+    console.error(err);
+  }
 }
 
 //add user Details
@@ -41,8 +49,9 @@ exports.addUsers = async (req, res) => {
   } = req.body;
 
   const userPassword = encrypt(String);
-  //TODO: Decrypt method
   const decryptPassword = decrypt(userPassword);
+
+  console.log(decryptPassword);
 
   const userDetails = await UserDetails.create({
     userName,
@@ -52,17 +61,17 @@ exports.addUsers = async (req, res) => {
     status,
   });
 
-  var transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 465,
     secure: true,
     auth: {
       user: process.env.EMAIL,
-      pass: process.env.PASS2,
+      pass: process.env.PASS,
     },
   });
 
-  var mailOptions = {
+  const mailOptions = {
     from: process.env.EMAIL,
     to: userEmail,
     subject: `Welcome to ABC Company! ${userEmail}`,

@@ -6,6 +6,19 @@ const crypto = require("crypto");
 const algorithm = "aes-256-cbc"; //Using AES encryption
 const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
+const length = 10;
+
+//auto password generated
+function generatePassword() {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  console.log(result);
+  return result;
+}
 
 //Encrypting text
 function encrypt(text) {
@@ -43,12 +56,11 @@ exports.addUsers = async (req, res) => {
   const {
     userName,
     userEmail,
-    userPassword: String,
     userType,
-    status,
+    status
   } = req.body;
 
-  const userPassword = encrypt(String);
+  const userPassword = encrypt(generatePassword());
   const decryptPassword = decrypt(userPassword);
 
   console.log(decryptPassword);
@@ -61,6 +73,7 @@ exports.addUsers = async (req, res) => {
     status,
   });
 
+  //create a node mailer...
   const transporter = nodemailer.createTransport({
     service: "gmail",
     port: 465,

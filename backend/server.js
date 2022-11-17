@@ -1,14 +1,15 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+require("dotenv").config();
+const app = require("./app");
 
-const app = express();
-app.use(cors());
+// const app = express();
+// app.use(cors());
 
-//BodyParser Middleware
-app.use(bodyParser.json());
+// //BodyParser Middleware
+// app.use(bodyParser.json());
 
 //DB config
 const db = process.env.MONGODB_URI;
@@ -18,9 +19,9 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
-  .then(() => console.log('MongoDB Connected'))
+  .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => console.log('Server started on port ' + port));
+app.listen(port, () => console.log("Server started on port " + port));

@@ -19,7 +19,7 @@ module.exports = async (req, res, next) => {
     });
     next();
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return next(res.send({ message: 'authorization failed' }));
   }
 };

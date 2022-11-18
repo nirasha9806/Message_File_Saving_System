@@ -4,36 +4,35 @@ import Card from 'react-bootstrap/Card';
 import services from '../services/Services';
 import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+export default function Add() {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [type, setType] = useState('');
+
   const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
-  const login = async () => {
+  const handleTypeChange = (e) => {
+    setType(e.target.value);
+  };
+
+  const Add = async () => {
     let data = {
       username: username,
-      password: password,
+      email: email,
+      userType: type,
     };
 
-    let res = await services.login(data);
+    let res = await services.register(data);
 
-    window.sessionStorage.setItem('token', res.data.user.token);
-    window.sessionStorage.setItem('userType', res.data.user.type);
-
-    if (res.data.user.type === 'Admin' || res.data.user.type == 'admin') {
-      navigate('/message');
-    }
-    else {
-      navigate('/dashboard');
-    }
+    navigate('/users');
   };
 
   return (
@@ -43,31 +42,40 @@ export default function Login() {
           <div class='col-md-6 m-auto'>
             <Card>
               <Card.Body>
-                <h3 class='text-center display-6 mb-4'>Login</h3>
+                <h3 class='text-center display-6 mb-4'>Add User</h3>
                 <Form.Group className='mb-3' controlId='formBasicEmail'>
                   <Form.Label>Username</Form.Label>
                   <Form.Control
-                    type='email'
+                    type='text'
                     placeholder='Enter Username'
                     value={username}
                     onChange={handleUsernameChange}
                   />
                 </Form.Group>
                 <Form.Group className='mb-3' controlId='formBasicPassword'>
-                  <Form.Label>Password</Form.Label>
+                  <Form.Label>Email</Form.Label>
                   <Form.Control
-                    type='password'
-                    placeholder='Password'
-                    value={password}
-                    onChange={handlePasswordChange}
+                    type='email'
+                    placeholder='Email'
+                    value={email}
+                    onChange={handleEmailChange}
+                  />
+                </Form.Group>
+                <Form.Group className='mb-3' controlId='formBasicPassword'>
+                  <Form.Label>User Type</Form.Label>
+                  <Form.Control
+                    type='text'
+                    placeholder='User Type'
+                    value={type}
+                    onChange={handleTypeChange}
                   />
                 </Form.Group>
                 <div className='d-grid gap-2'>
                   <input
                     type='submit'
-                    value='Login'
+                    value='Add'
                     class='btn btn-primary btn-block'
-                    onClick={login}
+                    onClick={Add}
                   />
                 </div>
               </Card.Body>

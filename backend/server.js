@@ -19,8 +19,8 @@ const loginRoutes = require('./routes/login-route');
 const fileRoutes = require('./routes/file-route');
 
 app.use('/api/login', loginRoutes);
-app.use(checkAuth);
 app.use('/api/users', userRoutes);
+app.use(checkAuth);
 app.use('/api/message', messageRoutes);
 app.use('/api/file', fileRoutes);
 

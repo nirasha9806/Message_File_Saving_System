@@ -3,8 +3,9 @@ const Cryptr = require('cryptr');
 
 const AddDetails = async (req, res, next) => {
   try {
-    let cryptr = new Cryptr(req.body.message);
     console.log(req.body);
+
+    let cryptr = new Cryptr(req.body.message);
     let encstring = cryptr.encrypt(req.body.message);
 
     let message = new Message({
@@ -12,10 +13,10 @@ const AddDetails = async (req, res, next) => {
       user: req.userData.id,
     });
     await message.save();
-    res.status(200).json({ message: 'Message added succesfully' });
+    res.status(200).json({ success: true });
   } catch (err) {
     console.log(err);
-    res.status(400).send('unable to save database');
+    res.status(400).send({ message: 'unable to save database' });
   }
 };
 module.exports = {

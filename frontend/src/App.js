@@ -1,11 +1,21 @@
 import './App.css';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/login-component';
+import FileUpload from './components/file-upload-component';
+import MessageSave from './components/message-save-component';
+import UsersList from './components/user-component';
 
 function App() {
   return (
     <div>
       <Router>
-        <h1>Hello World</h1>
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='/file' element={<FileUpload />} />
+          <Route path='/message' element={<MessageSave />} />
+          <Route path='/users' element={<UsersList />} />
+        </Routes>
       </Router>
     </div>
   );

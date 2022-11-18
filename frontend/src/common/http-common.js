@@ -11,16 +11,10 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   function (config) {
-    const token = window.sessionStorage.getItem('webpart-token');
-    const loginMode = window.sessionStorage.getItem('loginmode');
-    const username = window.sessionStorage.getItem('username');
-    const userId = window.sessionStorage.getItem('userId');
+    const token = window.sessionStorage.getItem('token');
 
     if (token) {
       config.headers['Authorization'] = 'Bearer ' + token;
-      config.headers['LoginMode'] = loginMode;
-      config.headers['Username'] = username;
-      config.headers['UserId'] = userId;
     }
     return config;
   },
